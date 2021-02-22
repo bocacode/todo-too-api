@@ -47,8 +47,15 @@ exports.postTask = (req, res) => {
 }
 
 exports.patchTask = (req, res) => {
+  if(!req.body || !req.params.taskId) {
+    res.status(400).send('Invalid request')
+  }
   dbAuth()
-  res.status(200).send('patchTask')
+  db.collection('tasks').doc(req.params.taskId).update(req.body)
+    .then(res => {
+      this.getTasks(req, res)
+    })
+    .catch(err => res.status(500).send('UPDATE FAILED: '+ err))
 }
 
 exports.deleteTask = (req, res) => {
