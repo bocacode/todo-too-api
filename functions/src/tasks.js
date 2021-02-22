@@ -59,7 +59,12 @@ exports.patchTask = (req, res) => {
 }
 
 exports.deleteTask = (req, res) => {
+  if(!req.params.userId || !req.params.taskId) {
+    res.status(400).send('Invalid request')
+  }
   dbAuth()
-  res.status(200).send('deleteTask')
+  db.collection('tasks').doc(req.params.taskId).delete()
+    .then(() => this.getTasks(req, res))
+    .catch(err => res.status(500).send('DELETE FAILED: '+ err))
 }
 
