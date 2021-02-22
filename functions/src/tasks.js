@@ -52,7 +52,7 @@ exports.patchTask = (req, res) => {
   }
   dbAuth()
   db.collection('tasks').doc(req.params.taskId).update(req.body)
-    .then(res => {
+    .then(() => {
       this.getTasks(req, res)
     })
     .catch(err => res.status(500).send('UPDATE FAILED: '+ err))
